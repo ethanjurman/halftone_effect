@@ -2,8 +2,19 @@ from PIL import Image, ImageDraw, ImageOps
 import numpy as np
 import sys
 
-# Define the dot size variable at the top
+IMAGE = './image.png'
+OUTPUT = './updated.png'
 DOT_SIZE = 10
+OUTPUT_SIZE = 2048
+
+if (len(sys.argv) > 1):
+  IMAGE = sys.argv[1]
+if (len(sys.argv) > 2):
+  OUTPUT = sys.argv[2]
+if (len(sys.argv) > 3):
+  DOT_SIZE = int(sys.argv[3])
+if (len(sys.argv) > 4):
+  OUTPUT_SIZE = int(sys.argv[4])
 
 def apply_dots(channel, dot_size, shift_x, shift_y, channel_name):
   width, height = channel.size
@@ -31,7 +42,7 @@ def scale_image(image, target_width=1024):
 
 def halftone_cmyk_effect(image_path, output_path, dot_size):
   image = Image.open(image_path).convert("CMYK")
-  image = scale_image(image, 1024 * 2)
+  image = scale_image(image, OUTPUT_SIZE)
   c, m, y, k = image.split()
 
   c_dots = apply_dots(c, dot_size, 0, 0, "c")
@@ -44,7 +55,7 @@ def halftone_cmyk_effect(image_path, output_path, dot_size):
   rgb_halftone.save(output_path)
 
 # Run the updated script
-halftone_cmyk_effect(sys.argv[1], "./updated.png", DOT_SIZE)
+halftone_cmyk_effect(IMAGE, OUTPUT, DOT_SIZE)
 
 # Return the path to the new processed image
 "/updated.png"
