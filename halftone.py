@@ -6,6 +6,7 @@ IMAGE = './image.png'
 OUTPUT = './updated.png'
 DOT_SIZE = 10
 OUTPUT_SIZE = 2048
+SHIFT_SIZE = 2
 
 if (len(sys.argv) > 1):
   IMAGE = sys.argv[1]
@@ -15,6 +16,8 @@ if (len(sys.argv) > 3):
   DOT_SIZE = int(sys.argv[3])
 if (len(sys.argv) > 4):
   OUTPUT_SIZE = int(sys.argv[4])
+if (len(sys.argv) > 5):
+  SHIFT_SIZE = int(sys.argv[5])
 
 def apply_dots(channel, dot_size, shift_x, shift_y, channel_name):
   width, height = channel.size
@@ -46,9 +49,9 @@ def halftone_cmyk_effect(image_path, output_path, dot_size):
   c, m, y, k = image.split()
 
   c_dots = apply_dots(c, dot_size, 0, 0, "c")
-  m_dots = apply_dots(m, dot_size, 2, 0, "m")
-  y_dots = apply_dots(y, dot_size, 0, 2, "y")
-  k_dots = apply_dots(k, dot_size, 2, 2, "k")
+  m_dots = apply_dots(m, dot_size, SHIFT_SIZE, 0, "m")
+  y_dots = apply_dots(y, dot_size, 0, SHIFT_SIZE, "y")
+  k_dots = apply_dots(k, dot_size, SHIFT_SIZE, SHIFT_SIZE, "k")
 
   cmyk_halftone = Image.merge("CMYK", (c_dots, m_dots, y_dots, k_dots))
   rgb_halftone = cmyk_halftone.convert("RGB")
